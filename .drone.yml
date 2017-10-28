@@ -1,0 +1,36 @@
+workspace:
+  base: /go
+  path: src/github.com/wasilak/kubernetes_exporter
+
+pipeline:
+  build:
+    image: golang:${GO_VERSION}
+    commands:
+      - go get github.com/prometheus/client_golang/prometheus
+      - go install ./...
+      - mv /go/bin/kubernetes_exporter /go/bin/kubernetes_exporter-$GOOS-$GOARCH
+      - ls -lha $GOPATH/bin
+
+  github_release:
+    image: plugins/github-release
+    secrets: [ github_token ]
+    files:
+       - /go/bin/*
+    when:
+      event: tag
+
+matrix:
+  GOPATH:
+    - /go
+
+  GO_VERSION:
+    - latest
+
+  GOARCH:
+    - 386
+    - amd64
+
+  GOOS:
+    - linux
+    - darwin
+    - windows

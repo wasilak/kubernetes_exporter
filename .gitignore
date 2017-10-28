@@ -46,7 +46,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -200,4 +199,20 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+### Go ###
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
 # End of https://www.gitignore.io/api/tags,macos,python,windows,sublimetext
+
+bin
