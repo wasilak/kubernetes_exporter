@@ -9,6 +9,7 @@ parser = OptionParser()
 
 parser.add_option("-l", "--listen", dest="listen", help="ip/hostname on which server will listen", action="store", default="0.0.0.0")
 parser.add_option("-p", "--port", dest="port", help="port on which server will listen", action="store", default="8000")
+parser.add_option("-e", "--env", dest="env", help="env, defaults to 'dev'", action="store", default="dev")
 
 (options, args) = parser.parse_args()
 
@@ -21,7 +22,7 @@ gauges = {}
 
 prefix_namespace_limit = "k8s_namespace"
 
-environment = "dev"
+environment = options.env
 
 gauges["%s_info" % (prefix_namespace_limit)] = Gauge(
     "%s_info" % (prefix_namespace_limit),
