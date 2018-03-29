@@ -7,10 +7,7 @@ pipeline:
     image: golang:${GO_VERSION}
     commands:
       - go get github.com/prometheus/client_golang/prometheus
-      - go build -o $GOPATH/bin/kubernetes_exporter *.go
-      - ls -lha $GOPATH/bin
-      - mv $GOPATH/bin/kubernetes_exporter $GOPATH/bin/kubernetes_exporter-$GOOS-$GOARCH
-      - ls -lha $GOPATH/bin
+      - go build -o $GOPATH/bin/kubernetes_exporter-$GOOS-$GOARCH *.go
 
   github_release:
     image: plugins/github-release
