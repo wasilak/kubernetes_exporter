@@ -1,10 +1,7 @@
 package resourcequota
 
 import (
-	"encoding/json"
-	"fmt"
-
-	"lib"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 // K8sResourceQuota type
@@ -39,29 +36,6 @@ type K8sResourceQuotaItems struct {
 
 // GetK8sResourceQuotaItems func
 func GetK8sResourceQuotaItems(prefixNamespaceLimit string, environment string) {
-	command := []string{
-		"--kubeconfig",
-		fmt.Sprintf("/Users/wasilp01/kubernetes/%s-kube.config", environment),
-		"--all-namespaces=true",
-		"get",
-		"quota",
-		"-o",
-		"json",
-	}
-
-	stdout := lib.RunKubectl(command)
-
-	var jsonOutput K8sResourceQuotaItems
-
-	json.Unmarshal(stdout, &jsonOutput)
-
-	for _, item := range jsonOutput.Items {
-
-		LimitsCPU(prefixNamespaceLimit, environment, item)
-		LimitsMemory(prefixNamespaceLimit, environment, item)
-		RequestsCPU(prefixNamespaceLimit, environment, item)
-		RequestsMemory(prefixNamespaceLimit, environment, item)
-		Pods(prefixNamespaceLimit, environment, item)
-
-	}
+	collector := NewResourceQuotaCollector(prefixNamespaceLimit, environment)
+	prometheus.MustRegister(collector)
 }

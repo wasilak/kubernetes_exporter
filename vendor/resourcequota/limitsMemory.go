@@ -1,36 +1,27 @@
 package resourcequota
 
 import (
-	"fmt"
+	"lib"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"lib"
 )
 
 // LimitsMemory func
-func LimitsMemory(prefixNamespaceLimit string, environment string, item K8sResourceQuota) {
-	text := fmt.Sprintf("%s_quota_%s_limits_memory", prefixNamespaceLimit, "used")
-	gauge := prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: text,
-		Help: text,
-		ConstLabels: prometheus.Labels{
-			"namespace":   item.Metadata.Namespace,
-			"environment": environment,
-		},
-	})
-	gauge.Set(lib.CalculateMetric(item.Status.Used.LimitsMemory))
-	prometheus.MustRegister(gauge)
-
-	text = fmt.Sprintf("%s_quota_%s_limits_memory", prefixNamespaceLimit, "hard")
-	gauge = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: text,
-		Help: text,
-		ConstLabels: prometheus.Labels{
-			"namespace":   item.Metadata.Namespace,
-			"environment": environment,
-		},
-	})
-	gauge.Set(lib.CalculateMetric(item.Status.Hard.LimitsMemory))
-	prometheus.MustRegister(gauge)
-
+func LimitsMemory(desc *prometheus.Desc, ch chan<- prometheus.Metric, environment string, item K8sResourceQuota) {
+	ch <- prometheus.MustNewConstMetric(
+		desc,
+		prometheus.GaugeValue,
+		lib.CalculateMetric(item.Status.Used.LimitsMemory),
+		item.Metadata.Namespace,
+		environment,
+		"used",
+	)
+	ch <- prometheus.MustNewConstMetric(
+		desc,
+		prometheus.GaugeValue,
+		lib.CalculateMetric(item.Status.Hard.LimitsMemory),
+		item.Metadata.Namespace,
+		environment,
+		"hard",
+	)
 }

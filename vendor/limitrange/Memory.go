@@ -8,13 +8,13 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// CPU func
-func CPU(desc *prometheus.Desc, ch chan<- prometheus.Metric, environment string, item K8sLimitRange, i int) {
+// Memory func
+func Memory(desc *prometheus.Desc, ch chan<- prometheus.Metric, environment string, item K8sLimitRange, i int) {
 
 	ch <- prometheus.MustNewConstMetric(
 		desc,
 		prometheus.GaugeValue,
-		lib.CalculateMetric(item.Spec.Limits[i].Default.CPU),
+		lib.CalculateMetric(item.Spec.Limits[i].Default.Memory),
 		item.Metadata.Namespace,
 		environment,
 		fmt.Sprintf("%d", i),
@@ -24,7 +24,7 @@ func CPU(desc *prometheus.Desc, ch chan<- prometheus.Metric, environment string,
 	ch <- prometheus.MustNewConstMetric(
 		desc,
 		prometheus.GaugeValue,
-		lib.CalculateMetric(item.Spec.Limits[i].DefaultRequest.CPU),
+		lib.CalculateMetric(item.Spec.Limits[i].DefaultRequest.Memory),
 		item.Metadata.Namespace,
 		environment,
 		fmt.Sprintf("%d", i),
