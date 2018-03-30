@@ -6,18 +6,14 @@ pipeline:
   build:
     image: golang:${GO_VERSION}
     commands:
-      # - go get github.com/prometheus/client_golang/prometheus
       - go get -t ./...
       - go build -o $GOPATH/bin/kubernetes_exporter-$GOOS-$GOARCH *.go
-      # - go install ./...
 
   github_release:
     image: plugins/github-release
     secrets: [ github_token ]
     files:
-       - $GOPATH/bin/kubernetes_exporter-$GOOS-$GOARCH
-    checksum:
-    - sha256
+       - /go/bin/kubernetes_exporter-*
     when:
       event: tag
 
@@ -30,9 +26,9 @@ matrix:
 
   GOARCH:
     - amd64
-    # - 386
+    - 386
 
   GOOS:
     - linux
-    # - darwin
-    # - windows
+    - darwin
+    - windows
