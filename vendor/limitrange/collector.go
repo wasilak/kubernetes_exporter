@@ -51,8 +51,6 @@ func (collector *Collector) Describe(ch chan<- *prometheus.Desc) {
 func (collector *Collector) Collect(ch chan<- prometheus.Metric) {
 
 	command := []string{
-		"--kubeconfig",
-		fmt.Sprintf("/Users/wasilp01/kubernetes/%s-kube.config", environment),
 		"--all-namespaces=true",
 		"get",
 		"limits",
