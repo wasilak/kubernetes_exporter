@@ -14,6 +14,8 @@ pipeline:
     secrets: [ github_token ]
     files:
        - /go/bin/*
+    checksum:
+    - sha256
     when:
       event: tag
 
