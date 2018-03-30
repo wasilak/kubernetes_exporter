@@ -35,7 +35,7 @@ type K8sResourceQuotaItems struct {
 }
 
 // GetK8sResourceQuotaItems func
-func GetK8sResourceQuotaItems(prefixNamespaceLimit string, environment string) {
-	collector := NewResourceQuotaCollector(prefixNamespaceLimit, environment)
+func GetK8sResourceQuotaItems(prefixNamespaceLimit string, environment string, kubeconfig string) {
+	collector := NewResourceQuotaCollector(prefixNamespaceLimit, environment, kubeconfig)
 	prometheus.MustRegister(collector)
 }

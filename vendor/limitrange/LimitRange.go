@@ -32,7 +32,7 @@ type K8sLimitRangeItems struct {
 }
 
 // GetK8sLimitRangeItems func
-func GetK8sLimitRangeItems(prefixNamespaceLimit string, environment string) {
-	collector := NewLimitRangeCollector(prefixNamespaceLimit, environment)
+func GetK8sLimitRangeItems(prefixNamespaceLimit string, environment string, kubeconfig string) {
+	collector := NewLimitRangeCollector(prefixNamespaceLimit, environment, kubeconfig)
 	prometheus.MustRegister(collector)
 }

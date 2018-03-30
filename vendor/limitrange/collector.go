@@ -16,11 +16,13 @@ type Collector struct {
 
 var (
 	environment string
+	kubeconfig  string
 )
 
 // NewLimitRangeCollector func
-func NewLimitRangeCollector(prefixNamespaceLimit string, env string) *Collector {
+func NewLimitRangeCollector(prefixNamespaceLimit string, env string, kubeconf string) *Collector {
 	environment = env
+	kubeconfig = kubeconf
 
 	text := map[string]string{
 		"limitsCPU":    fmt.Sprintf("%s_limits_cpu", prefixNamespaceLimit),
@@ -56,6 +58,10 @@ func (collector *Collector) Collect(ch chan<- prometheus.Metric) {
 		"limits",
 		"-o",
 		"json",
+	}
+
+	if len(kubeconfig) > 0 {
+		command = append(command, "--kubeconfig="+kubeconfig)
 	}
 
 	stdout := lib.RunKubectl(command)

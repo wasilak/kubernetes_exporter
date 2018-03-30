@@ -1,10 +1,12 @@
 package lib
 
 import (
+	"fmt"
 	"log"
 	"os/exec"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 // RunKubectl func
@@ -12,6 +14,8 @@ func RunKubectl(command []string) []byte {
 	stdout, err := exec.Command("kubectl", command...).Output()
 
 	if err != nil {
+		fmt.Println("kubectl command returned nothing or other error occured.")
+		fmt.Printf("Executed command: 'kubectl %s'\n", strings.Join(command, " "))
 		log.Fatal(err)
 	}
 

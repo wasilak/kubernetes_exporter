@@ -19,11 +19,13 @@ type Collector struct {
 
 var (
 	environment string
+	kubeconfig  string
 )
 
 // NewResourceQuotaCollector func
-func NewResourceQuotaCollector(prefixNamespaceLimit string, env string) *Collector {
+func NewResourceQuotaCollector(prefixNamespaceLimit string, env string, kubeconf string) *Collector {
 	environment = env
+	kubeconfig = kubeconf
 
 	variableLabels := []string{
 		"namespace",
@@ -61,13 +63,15 @@ func (collector *Collector) Describe(ch chan<- *prometheus.Desc) {
 func (collector *Collector) Collect(ch chan<- prometheus.Metric) {
 
 	command := []string{
-		"--kubeconfig",
-		fmt.Sprintf("/Users/wasilp01/kubernetes/%s-kube.config", environment),
 		"--all-namespaces=true",
 		"get",
 		"quota",
 		"-o",
 		"json",
+	}
+
+	if len(kubeconfig) > 0 {
+		command = append(command, "--kubeconfig="+kubeconfig)
 	}
 
 	stdout := lib.RunKubectl(command)
